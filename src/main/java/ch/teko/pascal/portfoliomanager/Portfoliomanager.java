@@ -5,13 +5,15 @@
 
 package ch.teko.pascal.portfoliomanager;
 
+import java.io.IOException;
+
 /**
  *
  * @author Pasca
  */
 public class Portfoliomanager {
-
-    public static void main(String[] args) {
-        System.out.println("Hello World!");
+    
+    public static void main(String[] args) throws IOException {
+        
     }
 }
