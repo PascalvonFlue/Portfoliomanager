@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package ch.teko.pascal.portfoliomanager;
 
 import java.io.IOException;
@@ -25,7 +22,6 @@ public class Stock {
         this.DTO = new APIController(this.symbol);
         this.currentPrice = this.DTO.getPrice();
         this.mouvment = this.DTO.getMouvment();
-        
     }
     
     public float calcROI_curreny(){
@@ -34,6 +30,10 @@ public class Stock {
     
     public float calcROI_percent(){
         return (this.currentPrice/this.purchasePrice)*100 - 100;
+    }
+    
+    public float calcPosition(){
+        return this.currentPrice*this.shares;
     }
     
     public void update() throws IOException{
