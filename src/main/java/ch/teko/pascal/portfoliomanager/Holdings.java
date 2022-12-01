@@ -6,7 +6,6 @@ package ch.teko.pascal.portfoliomanager;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -24,12 +23,12 @@ public class Holdings {
         updatePortfolio();
     }
     
-    public void remouve(Stock stock) throws IOException{
+    public void remove(Stock stock) throws IOException{
         this.holdings.remove(stock);
         updatePortfolio();
     }
     
-    public void updatePortfolio() throws IOException{
+    public void updatePortfolio() throws IOException{ //Update through gui, leave public
         for (Stock stobj : holdings){
             stobj.update();
         }

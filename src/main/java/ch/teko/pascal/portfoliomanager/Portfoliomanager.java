@@ -1,4 +1,3 @@
-
 package ch.teko.pascal.portfoliomanager;
 
 import java.io.IOException;
@@ -10,17 +9,22 @@ import java.io.IOException;
 public class Portfoliomanager {
     
     public static void main(String[] args) throws IOException {
-        Holdings h1 = new Holdings();
+        User Pascal = new User("Pascal", "von Flüe");
         Stock NIO = new Stock("NIO", 11, 50);
         Stock INTC = new Stock("INTC", 10, 100);
-        h1.add(NIO);
-        h1.add(INTC);
-        System.out.println(h1.getROI_currency());
-        System.out.println(h1.getROI_percent());
-        System.out.println(h1.getHoldingsValue());
-        h1.remouve(INTC);
-        System.out.println(h1.getROI_currency());
-        System.out.println(h1.getROI_percent());
-        System.out.println(h1.getHoldingsValue());
+        Pascal.hld.add(NIO);
+        Pascal.hld.add(INTC);
+        System.out.println(Pascal.hld.getROI_currency());
+        System.out.println(Pascal.hld.getROI_percent());
+        System.out.println(Pascal.hld.getHoldingsValue());
+        Pascal.hld.remove(INTC);
+        System.out.println(Pascal.hld.getROI_currency());
+        System.out.println(Pascal.hld.getROI_percent());
+        System.out.println(Pascal.hld.getHoldingsValue());
+        
+        GraphMaker graph = new GraphMaker();
+        GraphMaker.OHLCGraph test = graph.new OHLCGraph(NIO);
+        
+        
     }
 }

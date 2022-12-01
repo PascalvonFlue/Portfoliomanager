@@ -2,6 +2,9 @@
 package ch.teko.pascal.portfoliomanager;
 
 import java.io.IOException;
+import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.List;
 
 /**
  *
@@ -34,6 +37,12 @@ public class Stock {
     
     public float calcPosition(){
         return this.currentPrice*this.shares;
+    }
+    
+    public LinkedHashMap getHistory() throws IOException{
+        LinkedHashMap<Date, List> history = new LinkedHashMap<Date, List>();
+        history = DTO.getOHLCdata();
+        return history;
     }
     
     public void update() throws IOException{

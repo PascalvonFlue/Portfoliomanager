@@ -6,7 +6,9 @@ package ch.teko.pascal.portfoliomanager;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import yahoofinance.Stock;
@@ -39,23 +41,26 @@ public class APIController {
         return delta.floatValue();
     }
     
-    public void getOHLCdata() throws IOException{
-        LinkedHashMap<String, BigDecimal[]> historyStock = new LinkedHashMap<String, BigDecimal[]>();
-        BigDecimal stockData [] = null; //1: High, 2: Low, 3: Open, 4: Close
+    public LinkedHashMap getOHLCdata() throws IOException{
+        LinkedHashMap<Date, List> historyStock = new LinkedHashMap<Date, List>();
+        Date date;
+        
         Calendar from = Calendar.getInstance();
         Calendar to = Calendar.getInstance();
         from.add(Calendar.YEAR, -1);
-        Stock stock = YahooFinance.get(symbol, from, to, Interval.WEEKLY);
-        List<HistoricalQuote> stockHistQuotes = stock.getHistory();
-        System.out.println(stockHistQuotes);
         
+        Stock stock = YahooFinance.get(this.symbol, from, to, Interval.WEEKLY);
+        List<HistoricalQuote> stockHistQuotes = stock.getHistory();
         for(HistoricalQuote element : stockHistQuotes){
-            stockData[0] = element.getHigh();
-            stockData[1] = element.getLow();
-            stockData[2] = element.getOpen();
-            stockData[3] = element.getClose();
-            historyStock.put(symbol, stockData);
-            stockData = null;
+            ArrayList <Object> stockData = new ArrayList <>();
+            stockData.add(0, element.getHigh().doubleValue());
+            stockData.add(1, element.getLow().doubleValue());
+            stockData.add(2, element.getOpen().doubleValue());
+            stockData.add(3, element.getClose().doubleValue());
+            stockData.add(4, element.getVolume().doubleValue());
+            date = element.getDate().getTime();
+            historyStock.put(date, stockData);
         }
+        return historyStock;
     }
 }
