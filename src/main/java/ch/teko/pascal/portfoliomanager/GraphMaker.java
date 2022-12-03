@@ -1,45 +1,35 @@
 package ch.teko.pascal.portfoliomanager;
 
-import java.awt.Color;
 import java.io.IOException;
-import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.axis.NumberAxis;
-import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.chart.plot.XYPlot;
-import org.jfree.chart.renderer.xy.CandlestickRenderer;
-import org.jfree.data.time.FixedMillisecond;
-import org.jfree.data.time.ohlc.OHLCSeries;
-import org.jfree.data.time.ohlc.OHLCSeriesCollection;
 import org.jfree.data.xy.DefaultHighLowDataset;
 
 /**
  *
  * @author Pasca
  */
-public class GraphMaker {
+public class GraphMaker extends JPanel{
     
-    
+ 
     public class OHLCGraph{
         private String symbol;
         private DefaultHighLowDataset dataset;
-        private JFreeChart chart;
-        
         private LinkedHashMap<Date, List> history = new LinkedHashMap<Date, List>();
+        
         public OHLCGraph(Stock obj) throws IOException{
             this.symbol = obj.symbol;
             this.history = obj.getHistory();
             this.dataset = createDataset(this.symbol, this.history);
-            this.chart = createChart(this.dataset);
+            createChart(this.dataset);
         }
         
         private DefaultHighLowDataset createDataset(String symbol, LinkedHashMap history){
@@ -66,13 +56,41 @@ public class GraphMaker {
             return data;
         }
         
-        private JFreeChart createChart(final DefaultHighLowDataset dataset){
+        private void createChart(final DefaultHighLowDataset dataset){
             final JFreeChart chart = ChartFactory.createCandlestickChart(this.symbol, "Time", "Price", dataset, false);
-            return chart;
+            final ChartPanel chartPanel = new ChartPanel(chart);
+            chartPanel.setVisible(true);
+            JFrame frame = new JFrame();
+            frame.setBounds(100, 100, 676, 449);
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.setContentPane(chartPanel);
+            frame.setVisible(true);
+        }
+    }
+    
+    
+    public class PieChartStats{
+        private float value;
+        private float roi;
+        
+        public PieChartStats(Holdings h){
+            this.value = h.getHoldingsValue();
+            this.roi = h.getROI_currency();
         }
         
-        public JFreeChart getChart(){
-            return this.chart;
+        private void createDataset(){
+            
+        }
+        
+        private void createChart(){
+            
+        }
+    }
+    
+    public class PieChartHoldings{
+        
+        public PieChartHoldings(Holdings h){
+            
         }
     }
     

@@ -6,6 +6,7 @@ package ch.teko.pascal.portfoliomanager;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 /**
@@ -17,6 +18,7 @@ public class Holdings {
     private float roi_curreny; //Total amount gain or loss in Currency
     private float roi_percent; // Average gain or loss in percent
     private float totalholdings;
+    private float realROI = 0;
     
     public void add(Stock stock) throws IOException{
         this.holdings.add(stock);
@@ -25,6 +27,7 @@ public class Holdings {
     
     public void remove(Stock stock) throws IOException{
         this.holdings.remove(stock);
+        this.realROI = stock.calcROI_curreny() + this.realROI;
         updatePortfolio();
     }
     
@@ -47,11 +50,19 @@ public class Holdings {
         return this.totalholdings;
     }
     
+    public LinkedHashMap getHodingValuebyStock(){
+        LinkedHashMap<String, Float> stats = new LinkedHashMap<String, Float>();
+        for(Stock obj: this.holdings){
+            stats.put(obj.symbol, obj.currentPrice * obj.shares);
+        }
+        return stats;
+    }
+    
     private void calcROI(){ 
         this.roi_curreny = 0;
         this.roi_percent = 0;
         this.totalholdings = 0;
-        for (Stock stobj : holdings){
+        for (Stock stobj : this.holdings){
             this.roi_curreny = this.roi_curreny + stobj.calcROI_curreny();
             this.roi_percent = this.roi_percent + stobj.calcROI_percent();
             this.totalholdings = this.totalholdings + stobj.calcPosition();

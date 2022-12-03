@@ -1,12 +1,13 @@
 package ch.teko.pascal.portfoliomanager;
 
 import java.io.IOException;
+import javax.swing.JPanel;
 
 /**
  *
  * @author Pasca
  */
-public class Portfoliomanager {
+public class Portfoliomanager extends JPanel{
     
     public static void main(String[] args) throws IOException {
         User Pascal = new User("Pascal", "von Flüe");
@@ -23,8 +24,6 @@ public class Portfoliomanager {
         System.out.println(Pascal.hld.getHoldingsValue());
         
         GraphMaker graph = new GraphMaker();
-        GraphMaker.OHLCGraph test = graph.new OHLCGraph(NIO);
-        
-        
+        GraphMaker.OHLCGraph test = graph.new OHLCGraph(NIO);    
     }
 }
