@@ -13,17 +13,18 @@ public class Portfoliomanager extends JPanel{
         User Pascal = new User("Pascal", "von Flüe");
         Stock NIO = new Stock("NIO", 11, 50);
         Stock INTC = new Stock("INTC", 10, 100);
+        Stock TSLA = new Stock("TSLA",100,30);
         Pascal.hld.add(NIO);
         Pascal.hld.add(INTC);
-        System.out.println(Pascal.hld.getROI_currency());
-        System.out.println(Pascal.hld.getROI_percent());
-        System.out.println(Pascal.hld.getHoldingsValue());
-        Pascal.hld.remove(INTC);
+        Pascal.hld.add(TSLA);
         System.out.println(Pascal.hld.getROI_currency());
         System.out.println(Pascal.hld.getROI_percent());
         System.out.println(Pascal.hld.getHoldingsValue());
         
         GraphMaker graph = new GraphMaker();
-        GraphMaker.OHLCGraph test = graph.new OHLCGraph(NIO);    
+        GraphMaker.OHLCGraph test = graph.new OHLCGraph(NIO);
+        
+        GraphMaker.PieChartHoldings test1 = graph.new PieChartHoldings(Pascal.hld);
+        
     }
 }

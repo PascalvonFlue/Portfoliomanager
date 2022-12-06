@@ -52,7 +52,7 @@ public class APIController {
         Stock stock = YahooFinance.get(this.symbol, from, to, Interval.DAILY);
         List<HistoricalQuote> stockHistQuotes = stock.getHistory();
         for(HistoricalQuote element : stockHistQuotes){
-            ArrayList <Object> stockData = new ArrayList <>();
+            ArrayList <Double> stockData = new ArrayList <>();
             stockData.add(0, element.getHigh().doubleValue());
             stockData.add(1, element.getLow().doubleValue());
             stockData.add(2, element.getOpen().doubleValue());
