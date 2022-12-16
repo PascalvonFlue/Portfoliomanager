@@ -30,16 +30,20 @@ public class GUIRunner extends javax.swing.JFrame {
         Stock INTC = new Stock("INTC", 10, 100);
         Stock TSLA = new Stock("TSLA",100,30);
         Stock BAC = new Stock("BAC", 50, 10);
+        Stock AMZN = new Stock("AMZN", 30,50);
         this.hld.add(NIO);
         this.hld.add(INTC);
         this.hld.add(TSLA);
         this.hld.add(BAC);
-     
+        this.hld.add(AMZN);
+        
         initComponents();
   
         StockTable.setModel(fillStockList(this.hld.holdings));
         GraphMaker.PieChartHoldings ovrviw = this.grph.new PieChartHoldings(this.hld);
-        OverviewPanel.add(ovrviw.getChart(), BorderLayout.CENTER);
+        OverviewChartPanel.add(ovrviw.getChart(), BorderLayout.CENTER);
+        
+        jTabbedPane1.setEnabledAt(1, false);
     }
     
     private DefaultTableModel fillStockList(List<Stock> stocks){
@@ -71,40 +75,43 @@ public class GUIRunner extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
+        jTabbedPane1 = new javax.swing.JTabbedPane();
         OverviewPanel = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         StockTable = new javax.swing.JTable();
+        OverviewChartPanel = new javax.swing.JPanel();
+        StockPanel = new javax.swing.JPanel();
+        StockChartPanel = new javax.swing.JPanel();
+        DescText = new javax.swing.JTextArea();
+        OvervText = new javax.swing.JTextArea();
+        TradePanel = new javax.swing.JPanel();
+        StockTickerField = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        PriceShareField = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
+        AmountField = new javax.swing.JTextField();
+        BuyButton = new javax.swing.JButton();
+        CurrentPriceCheckbox = new javax.swing.JCheckBox();
+        jComboBox1 = new javax.swing.JComboBox<>();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        AmountField1 = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
+        PriceShareField1 = new javax.swing.JTextField();
+        CurrentPriceCheckbox1 = new javax.swing.JCheckBox();
+        SellButton = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        OutputTextField = new javax.swing.JTextPane();
+        jLabel8 = new javax.swing.JLabel();
+        PriceShareField2 = new javax.swing.JTextField();
+        TodayCheckbox_buy = new javax.swing.JCheckBox();
+        jLabel9 = new javax.swing.JLabel();
+        PriceShareField3 = new javax.swing.JTextField();
+        TodayCheckbox_Sell = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
-
-        javax.swing.GroupLayout OverviewPanelLayout = new javax.swing.GroupLayout(OverviewPanel);
-        OverviewPanel.setLayout(OverviewPanelLayout);
-        OverviewPanelLayout.setHorizontalGroup(
-            OverviewPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 552, Short.MAX_VALUE)
-        );
-        OverviewPanelLayout.setVerticalGroup(
-            OverviewPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(OverviewPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(OverviewPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
-        );
 
         StockTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -124,38 +131,332 @@ public class GUIRunner extends javax.swing.JFrame {
         });
         jScrollPane2.setViewportView(StockTable);
 
+        javax.swing.GroupLayout OverviewChartPanelLayout = new javax.swing.GroupLayout(OverviewChartPanel);
+        OverviewChartPanel.setLayout(OverviewChartPanelLayout);
+        OverviewChartPanelLayout.setHorizontalGroup(
+            OverviewChartPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 560, Short.MAX_VALUE)
+        );
+        OverviewChartPanelLayout.setVerticalGroup(
+            OverviewChartPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout OverviewPanelLayout = new javax.swing.GroupLayout(OverviewPanel);
+        OverviewPanel.setLayout(OverviewPanelLayout);
+        OverviewPanelLayout.setHorizontalGroup(
+            OverviewPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, OverviewPanelLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 265, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(OverviewChartPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(15, 15, 15))
+        );
+        OverviewPanelLayout.setVerticalGroup(
+            OverviewPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(OverviewPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(OverviewPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(OverviewChartPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 605, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+
+        jTabbedPane1.addTab("Overview", OverviewPanel);
+
+        javax.swing.GroupLayout StockChartPanelLayout = new javax.swing.GroupLayout(StockChartPanel);
+        StockChartPanel.setLayout(StockChartPanelLayout);
+        StockChartPanelLayout.setHorizontalGroup(
+            StockChartPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        StockChartPanelLayout.setVerticalGroup(
+            StockChartPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 343, Short.MAX_VALUE)
+        );
+
+        DescText.setEditable(false);
+        DescText.setColumns(20);
+        DescText.setLineWrap(true);
+        DescText.setRows(5);
+        DescText.setWrapStyleWord(true);
+
+        OvervText.setEditable(false);
+        OvervText.setColumns(20);
+        OvervText.setLineWrap(true);
+        OvervText.setRows(5);
+        OvervText.setWrapStyleWord(true);
+
+        javax.swing.GroupLayout StockPanelLayout = new javax.swing.GroupLayout(StockPanel);
+        StockPanel.setLayout(StockPanelLayout);
+        StockPanelLayout.setHorizontalGroup(
+            StockPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(StockPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(StockPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(StockChartPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(StockPanelLayout.createSequentialGroup()
+                        .addComponent(DescText, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 246, Short.MAX_VALUE)
+                        .addComponent(OvervText, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
+        );
+        StockPanelLayout.setVerticalGroup(
+            StockPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(StockPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(StockChartPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(StockPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(OvervText, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)
+                    .addComponent(DescText))
+                .addContainerGap())
+        );
+
+        jTabbedPane1.addTab("Stock", StockPanel);
+
+        StockTickerField.setText("example TSLA");
+
+        jLabel2.setText("Stock Ticker");
+
+        jLabel3.setText("Purchase Price");
+
+        PriceShareField.setText("example 50.30");
+
+        jLabel4.setText("Amount of shares");
+
+        BuyButton.setText("Add to Portfolio");
+
+        CurrentPriceCheckbox.setText("Use current Price");
+        CurrentPriceCheckbox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CurrentPriceCheckboxActionPerformed(evt);
+            }
+        });
+
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        jLabel5.setText("Select Stock");
+
+        jLabel6.setText("Amount of shares");
+
+        AmountField1.setText("example 100");
+
+        jLabel7.setText("Sell Price");
+
+        PriceShareField1.setText("example 50.30");
+
+        CurrentPriceCheckbox1.setText("Use current Price");
+        CurrentPriceCheckbox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CurrentPriceCheckbox1ActionPerformed(evt);
+            }
+        });
+
+        SellButton.setText("Remouve from Portfolio");
+
+        jScrollPane1.setViewportView(OutputTextField);
+
+        jLabel8.setText("Purchase Price");
+
+        TodayCheckbox_buy.setText("Today");
+        TodayCheckbox_buy.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                TodayCheckbox_buyActionPerformed(evt);
+            }
+        });
+
+        jLabel9.setText("Date");
+
+        PriceShareField3.setText("example 50.30");
+
+        TodayCheckbox_Sell.setText("Today");
+        TodayCheckbox_Sell.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                TodayCheckbox_SellActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout TradePanelLayout = new javax.swing.GroupLayout(TradePanel);
+        TradePanel.setLayout(TradePanelLayout);
+        TradePanelLayout.setHorizontalGroup(
+            TradePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(TradePanelLayout.createSequentialGroup()
+                .addGap(47, 47, 47)
+                .addGroup(TradePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(TradePanelLayout.createSequentialGroup()
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(40, 40, 40)
+                        .addComponent(StockTickerField, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(TradePanelLayout.createSequentialGroup()
+                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(26, 26, 26)
+                        .addGroup(TradePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(PriceShareField, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(CurrentPriceCheckbox)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, TradePanelLayout.createSequentialGroup()
+                        .addComponent(jLabel4)
+                        .addGap(18, 18, 18)
+                        .addGroup(TradePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(BuyButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(AmountField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 182, Short.MAX_VALUE)))
+                    .addGroup(TradePanelLayout.createSequentialGroup()
+                        .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(26, 26, 26)
+                        .addGroup(TradePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(PriceShareField2, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(TodayCheckbox_buy))))
+                .addGap(127, 127, 127)
+                .addGroup(TradePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(TradePanelLayout.createSequentialGroup()
+                        .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(26, 26, 26)
+                        .addGroup(TradePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(TradePanelLayout.createSequentialGroup()
+                                .addComponent(TodayCheckbox_Sell)
+                                .addContainerGap(169, Short.MAX_VALUE))
+                            .addGroup(TradePanelLayout.createSequentialGroup()
+                                .addComponent(PriceShareField3)
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                    .addGroup(TradePanelLayout.createSequentialGroup()
+                        .addGroup(TradePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(TradePanelLayout.createSequentialGroup()
+                                .addGroup(TradePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel6)
+                                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, 18)
+                                .addGroup(TradePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(AmountField1, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(SellButton, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(TradePanelLayout.createSequentialGroup()
+                                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(26, 26, 26)
+                                .addGroup(TradePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(PriceShareField1, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(CurrentPriceCheckbox1))))
+                        .addContainerGap(98, Short.MAX_VALUE))))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, TradePanelLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 243, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(275, 275, 275))
+        );
+        TradePanelLayout.setVerticalGroup(
+            TradePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(TradePanelLayout.createSequentialGroup()
+                .addGroup(TradePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(TradePanelLayout.createSequentialGroup()
+                        .addGap(44, 44, 44)
+                        .addGroup(TradePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel2)
+                            .addComponent(StockTickerField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(TradePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel3)
+                            .addComponent(PriceShareField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(CurrentPriceCheckbox))
+                    .addGroup(TradePanelLayout.createSequentialGroup()
+                        .addGap(41, 41, 41)
+                        .addGroup(TradePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel5))
+                        .addGap(18, 18, 18)
+                        .addGroup(TradePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel7)
+                            .addComponent(PriceShareField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(CurrentPriceCheckbox1)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(TradePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(TradePanelLayout.createSequentialGroup()
+                        .addGroup(TradePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel8)
+                            .addComponent(PriceShareField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(TodayCheckbox_buy))
+                    .addGroup(TradePanelLayout.createSequentialGroup()
+                        .addGroup(TradePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel9)
+                            .addComponent(PriceShareField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(TodayCheckbox_Sell)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(TradePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(AmountField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel6)
+                    .addComponent(AmountField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(33, 33, 33)
+                .addGroup(TradePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(BuyButton)
+                    .addComponent(SellButton))
+                .addGap(50, 50, 50)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+
+        jTabbedPane1.addTab("Trade", TradePanel);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+            .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 858, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 473, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 650, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void StockTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_StockTableMouseClicked
+        StockChartPanel.removeAll();
         int select = StockTable.getSelectedRow();
         Stock obj = this.hld.holdings.get(select);
-        GraphMaker graph = new GraphMaker();
+        GraphMaker.OHLCGraph stkGraph = null;
         try {
-            GraphMaker.OHLCGraph test = graph.new OHLCGraph(obj);
+            stkGraph = this.grph.new OHLCGraph(obj);
         } catch (IOException ex) {
             Logger.getLogger(GUIRunner.class.getName()).log(Level.SEVERE, null, ex);
         }
+        StockChartPanel.add(stkGraph.getChart(), BorderLayout.CENTER);
+        DescText.setText(obj.DTO.getStockInfo());
+        obj.DTO.getWikiInfo();
+        
+        OvervText.setText(String.format("<b>Stock: </b> %s \n", obj.symbol) +
+                String.format("<b>Current Price: </b> %f USD\n", obj.currentPrice) +
+                String.format("<b>Amount of shares: </b> %x\n\n", obj.shares) +
+                String.format("<b>Purchase value: </b> %f USD\n", obj.purchasePrice * obj.shares) +
+                String.format("<b>Current value: </b> %f USD\n",obj.currentPrice * obj.shares) +
+                String.format("<b>ROI: </b> %f USD / %f",obj.calcROI_curreny(), obj.calcROI_percent()) +
+                "%");
+        
+        jTabbedPane1.setTitleAt(1, obj.symbol);
+        jTabbedPane1.setSelectedIndex(1);
+        jTabbedPane1.setEnabledAt(1, true);
     }//GEN-LAST:event_StockTableMouseClicked
+
+    private void CurrentPriceCheckboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CurrentPriceCheckboxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_CurrentPriceCheckboxActionPerformed
+
+    private void CurrentPriceCheckbox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CurrentPriceCheckbox1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_CurrentPriceCheckbox1ActionPerformed
+
+    private void TodayCheckbox_buyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TodayCheckbox_buyActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_TodayCheckbox_buyActionPerformed
+
+    private void TodayCheckbox_SellActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TodayCheckbox_SellActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_TodayCheckbox_SellActionPerformed
 
     /**
      * @param args the command line arguments
@@ -198,9 +499,39 @@ public class GUIRunner extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField AmountField;
+    private javax.swing.JTextField AmountField1;
+    private javax.swing.JButton BuyButton;
+    private javax.swing.JCheckBox CurrentPriceCheckbox;
+    private javax.swing.JCheckBox CurrentPriceCheckbox1;
+    private javax.swing.JTextArea DescText;
+    private javax.swing.JTextPane OutputTextField;
+    private javax.swing.JTextArea OvervText;
+    private javax.swing.JPanel OverviewChartPanel;
     private javax.swing.JPanel OverviewPanel;
+    private javax.swing.JTextField PriceShareField;
+    private javax.swing.JTextField PriceShareField1;
+    private javax.swing.JTextField PriceShareField2;
+    private javax.swing.JTextField PriceShareField3;
+    private javax.swing.JButton SellButton;
+    private javax.swing.JPanel StockChartPanel;
+    private javax.swing.JPanel StockPanel;
     private javax.swing.JTable StockTable;
-    private javax.swing.JPanel jPanel1;
+    private javax.swing.JTextField StockTickerField;
+    private javax.swing.JCheckBox TodayCheckbox_Sell;
+    private javax.swing.JCheckBox TodayCheckbox_buy;
+    private javax.swing.JPanel TradePanel;
+    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTabbedPane jTabbedPane1;
     // End of variables declaration//GEN-END:variables
 }

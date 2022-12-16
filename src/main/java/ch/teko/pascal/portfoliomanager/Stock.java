@@ -12,6 +12,7 @@ import java.util.List;
  */
 public class Stock {
     public final String symbol;
+    public final String name;
     public float currentPrice;
     public float purchasePrice;
     public float mouvment;
@@ -22,7 +23,9 @@ public class Stock {
         this.symbol = _symbol;
         this.purchasePrice = _purchasePrice;
         this.shares = _shares;
+        
         this.DTO = new APIController(this.symbol);
+        this.name = this.DTO.getName();
         this.currentPrice = this.DTO.getPrice();
         this.mouvment = this.DTO.getMouvment();
     }

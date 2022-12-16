@@ -29,12 +29,13 @@ public class GraphMaker extends JPanel{
         private String symbol;
         private DefaultHighLowDataset dataset;
         private LinkedHashMap<Date, List> history = new LinkedHashMap<Date, List>();
+        private ChartPanel chartPanel = null;
         
         public OHLCGraph(Stock obj) throws IOException{
             this.symbol = obj.symbol;
             this.history = obj.getHistory();
             this.dataset = createDataset(this.symbol, this.history);
-            createChart(this.dataset);
+            this.chartPanel = createChart(this.dataset);
         }
         
         private DefaultHighLowDataset createDataset(String symbol, LinkedHashMap history){
@@ -61,17 +62,25 @@ public class GraphMaker extends JPanel{
             return data;
         }
         
-        private void createChart(final DefaultHighLowDataset dataset){
+        private ChartPanel createChart(final DefaultHighLowDataset dataset){
             final JFreeChart chart = ChartFactory.createCandlestickChart(this.symbol, "Time", "Price", dataset, false);
             final ChartPanel chartPanel = new ChartPanel(chart);
             chartPanel.setHorizontalAxisTrace(true);
             chartPanel.setVerticalAxisTrace(true);
+            chartPanel.setDomainZoomable(true);
             chartPanel.setVisible(true);
+            chartPanel.setSize(840, 340);
+            /*
             JFrame frame = new JFrame();
             frame.setBounds(100, 100, 676, 449);
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setContentPane(chartPanel);
-            frame.setVisible(true);
+            frame.setVisible(true);*/
+            return chartPanel;
+        }
+        
+        public ChartPanel getChart(){
+            return this.chartPanel;
         }
     }
     
@@ -120,7 +129,7 @@ public class GraphMaker extends JPanel{
             final ChartPanel chartPanel = new ChartPanel(chart);
             chartPanel.setDomainZoomable(true);
             chartPanel.setVisible(true);
-            chartPanel.setSize(600, 300);
+            chartPanel.setSize(550, 300);
             /*
             JFrame frame = new JFrame();
             frame.setBounds(100, 100, 676, 449);
