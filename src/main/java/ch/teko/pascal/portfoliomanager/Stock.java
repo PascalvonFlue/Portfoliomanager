@@ -19,7 +19,7 @@ public class Stock {
     public int shares;
     public APIController DTO = null;
     
-    public Stock(String _symbol, float _purchasePrice, int _shares) throws IOException{
+    public Stock(String _symbol, float _purchasePrice, int _shares) throws IOException, NullPointerException{
         this.symbol = _symbol;
         this.purchasePrice = _purchasePrice;
         this.shares = _shares;
@@ -31,7 +31,7 @@ public class Stock {
     }
     
     public float calcROI_curreny(){
-        return this.currentPrice - this.purchasePrice;
+        return this.currentPrice*this.shares - this.purchasePrice*this.shares;
     }
     
     public float calcROI_percent(){
@@ -40,6 +40,10 @@ public class Stock {
     
     public float calcPosition(){
         return this.currentPrice*this.shares;
+    }
+    
+    public float calcInvestment(){
+        return this.purchasePrice*this.shares;
     }
     
     public LinkedHashMap getHistory() throws IOException{

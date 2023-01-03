@@ -1,5 +1,7 @@
 package ch.teko.pascal.portfoliomanager;
 
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.io.IOException;
 import java.util.Date;
 import java.util.Iterator;
@@ -23,7 +25,9 @@ import org.jfree.data.xy.DefaultHighLowDataset;
  * @author Pasca
  */
 public class GraphMaker extends JPanel{
-
+ 
+    Toolkit toolkit = Toolkit.getDefaultToolkit();
+    Dimension screensize = toolkit.getScreenSize();
     
     public class OHLCGraph{
         private String symbol;

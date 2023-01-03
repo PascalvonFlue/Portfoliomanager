@@ -18,16 +18,24 @@ public class Holdings {
     private float roi_curreny; //Total amount gain or loss in Currency
     private float roi_percent; // Average gain or loss in percent
     private float totalholdings;
+    private float investment;
     private float realROI = 0;
     
     public void add(Stock stock) throws IOException{
         this.holdings.add(stock);
+        this.investment = this.investment + stock.purchasePrice;
         updatePortfolio();
     }
     
-    public void remove(Stock stock) throws IOException{
+    public void remove(Stock stock, float price) throws IOException{
         this.holdings.remove(stock);
-        this.realROI = stock.calcROI_curreny() + this.realROI;
+        this.realROI = this.realROI + (stock.shares * price) - (stock.purchasePrice * stock.shares);
+        updatePortfolio();
+    }
+    
+    public void adjustStock(Stock stock,float price, int amount) throws IOException{
+        stock.shares = stock.shares - amount;
+        this.realROI = this.realROI + (price * amount) - (stock.purchasePrice * amount);
         updatePortfolio();
     }
     
@@ -50,6 +58,14 @@ public class Holdings {
         return this.totalholdings;
     }
     
+    public float getTotalInvestment(){
+        return this.investment;
+    }
+    
+    public float getRealROI(){
+        return realROI;
+    }
+    
     public LinkedHashMap getHodingValuebyStock(){
         LinkedHashMap<String, Float> stats = new LinkedHashMap<String, Float>();
         for(Stock obj: this.holdings){
@@ -62,12 +78,13 @@ public class Holdings {
         this.roi_curreny = 0;
         this.roi_percent = 0;
         this.totalholdings = 0;
+        this.investment = 0;
         for (Stock stobj : this.holdings){
-            this.roi_curreny = this.roi_curreny + stobj.calcROI_curreny();
-            this.roi_percent = this.roi_percent + stobj.calcROI_percent();
             this.totalholdings = this.totalholdings + stobj.calcPosition();
+            this.investment = this.investment + stobj.calcInvestment();
         }
-        this.roi_percent = this.roi_percent/holdings.size();
+        this.roi_percent = (100/this.investment * this.totalholdings) - 100;
+        this.roi_curreny = this.investment/100*this.roi_percent;
     }
     
 }

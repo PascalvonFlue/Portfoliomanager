@@ -52,7 +52,13 @@ public class APIController {
         this.name = getName();
     }
     
-    public String getName() throws IOException{
+    public String checkStock(String _symbol) throws IOException{
+        Stock stock = YahooFinance.get(_symbol);
+        System.out.println(stock.getName());
+        return stock.getName();
+    }
+    
+    public String getName() throws IOException, NullPointerException{
         Stock stock = YahooFinance.get(this.symbol);
         return stock.getName();
     }
@@ -115,8 +121,9 @@ public class APIController {
             //System.out.println(elements);
             for(Object element : elements){
                 String result = JsonPath.read(element, ".detailedDescription.articleBody").toString();
-                if(!(result.replace("[]", "").isBlank())){
-                    return result.replace("[]", "");
+                String cleanresult = result.replaceAll("[<>\\[\\],-,\\\"]", "");
+                if(!(cleanresult.isBlank())){
+                    return cleanresult;
                 }
             }
         } catch (Exception ex) {

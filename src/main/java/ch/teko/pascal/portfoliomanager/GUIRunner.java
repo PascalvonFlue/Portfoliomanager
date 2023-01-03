@@ -6,6 +6,7 @@ package ch.teko.pascal.portfoliomanager;
 
 import java.awt.BorderLayout;
 import java.io.IOException;
+import static java.lang.Integer.parseInt;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -26,28 +27,46 @@ public class GUIRunner extends javax.swing.JFrame {
     public GUIRunner() throws IOException {
         this.usr = new User("Pascal", "von Flüe");
         this.hld = usr.hld;
-        Stock NIO = new Stock("NIO", 11, 50);
+        Stock NIO1 = new Stock("NIO", 11, 50);
         Stock INTC = new Stock("INTC", 10, 100);
         Stock TSLA = new Stock("TSLA",100,30);
         Stock BAC = new Stock("BAC", 50, 10);
         Stock AMZN = new Stock("AMZN", 30,50);
-        this.hld.add(NIO);
-        this.hld.add(INTC);
-        this.hld.add(TSLA);
-        this.hld.add(BAC);
-        this.hld.add(AMZN);
+        this.hld.add(NIO1);
+        //this.hld.add(INTC);
+        //this.hld.add(TSLA);
+        //this.hld.add(BAC);
+        //this.hld.add(AMZN);
         
         initComponents();
-  
+        
+        OvrvieText.setContentType("text/html");
+        DescTxt.setContentType("text/html");
+        
         StockTable.setModel(fillStockList(this.hld.holdings));
         GraphMaker.PieChartHoldings ovrviw = this.grph.new PieChartHoldings(this.hld);
         OverviewChartPanel.add(ovrviw.getChart(), BorderLayout.CENTER);
         
         jTabbedPane1.setEnabledAt(1, false);
+        update();
+    }
+    
+    
+    private void update() throws IOException{
+        this.hld.updatePortfolio();
+        StockTable.setModel(fillStockList(this.hld.holdings));
+        GraphMaker.PieChartHoldings ovrviw = this.grph.new PieChartHoldings(this.hld);
+        OverviewChartPanel.removeAll();
+        OverviewChartPanel.add(ovrviw.getChart(), BorderLayout.CENTER);
+        
+        totalInvestLabel.setText(String.format("%.2f", this.hld.getTotalInvestment()) + " USD");
+        currentValueLabel.setText(String.format("%.2f", this.hld.getHoldingsValue()) + " USD");
+        potroiLable.setText(String.format("%.2f",this.hld.getROI_percent()) + "% / " +  String.format("%.2f",this.hld.getROI_currency())+ " USD");
+        realroiLable.setText(String.format("%.2f", this.hld.getRealROI()) + " USD");
     }
     
     private DefaultTableModel fillStockList(List<Stock> stocks){
-        final String colums[] = {"Symb", "Cur Prc", "Mvmt", "ROI"};
+        final String colums[] = {"Symb", "MP [USD]", "Mvmt [%]", "ROI [%]"};
         DefaultTableModel tableModel = new DefaultTableModel(colums,0){
             public boolean isCellEditable(int row, int column)
             {
@@ -57,9 +76,9 @@ public class GUIRunner extends javax.swing.JFrame {
         for(Stock element: stocks){
             String[] data = {
                 element.symbol,
-                String.valueOf(element.currentPrice),
-                String.valueOf(element.mouvment),
-                String.valueOf(element.calcROI_curreny())};
+                String.format("%.2f",element.currentPrice),
+                String.format("%.2f",element.mouvment),
+                String.format("%.2f",element.calcROI_curreny())};
                 tableModel.addRow(data);
         }
         tableModel.setColumnIdentifiers(colums);
@@ -80,25 +99,35 @@ public class GUIRunner extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         StockTable = new javax.swing.JTable();
         OverviewChartPanel = new javax.swing.JPanel();
+        StatsPanel = new javax.swing.JPanel();
+        title = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
+        totalInvestLabel = new javax.swing.JLabel();
+        currentValueLabel = new javax.swing.JLabel();
+        potroiLable = new javax.swing.JLabel();
+        realroiLable = new javax.swing.JLabel();
         StockPanel = new javax.swing.JPanel();
         StockChartPanel = new javax.swing.JPanel();
-        DescText = new javax.swing.JTextArea();
-        OvervText = new javax.swing.JTextArea();
+        OvrvieText = new javax.swing.JEditorPane();
+        DescTxt = new javax.swing.JEditorPane();
         TradePanel = new javax.swing.JPanel();
         StockTickerField = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        PriceShareField = new javax.swing.JTextField();
+        PriceShareFieldBuy = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
-        AmountField = new javax.swing.JTextField();
+        AmountFieldBuy = new javax.swing.JTextField();
         BuyButton = new javax.swing.JButton();
         CurrentPriceCheckbox = new javax.swing.JCheckBox();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        remouveStockList = new javax.swing.JComboBox<>();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        AmountField1 = new javax.swing.JTextField();
+        AmountFieldRemouve = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
-        PriceShareField1 = new javax.swing.JTextField();
+        PriceShareFieldRemouve = new javax.swing.JTextField();
         CurrentPriceCheckbox1 = new javax.swing.JCheckBox();
         SellButton = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -109,9 +138,16 @@ public class GUIRunner extends javax.swing.JFrame {
         jLabel9 = new javax.swing.JLabel();
         PriceShareField3 = new javax.swing.JTextField();
         TodayCheckbox_Sell = new javax.swing.JCheckBox();
+        outputLable = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
+
+        jTabbedPane1.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jTabbedPane1StateChanged(evt);
+            }
+        });
 
         StockTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -135,11 +171,85 @@ public class GUIRunner extends javax.swing.JFrame {
         OverviewChartPanel.setLayout(OverviewChartPanelLayout);
         OverviewChartPanelLayout.setHorizontalGroup(
             OverviewChartPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 560, Short.MAX_VALUE)
+            .addGap(0, 611, Short.MAX_VALUE)
         );
         OverviewChartPanelLayout.setVerticalGroup(
             OverviewChartPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 330, Short.MAX_VALUE)
+        );
+
+        title.setFont(new java.awt.Font("sansserif", 0, 24)); // NOI18N
+        title.setText("My Stats");
+
+        jLabel1.setFont(new java.awt.Font("sansserif", 1, 12)); // NOI18N
+        jLabel1.setText("Total Invested");
+
+        jLabel10.setFont(new java.awt.Font("sansserif", 1, 12)); // NOI18N
+        jLabel10.setText("Current Value");
+
+        jLabel11.setFont(new java.awt.Font("sansserif", 1, 12)); // NOI18N
+        jLabel11.setText("Realised ROI");
+
+        jLabel12.setFont(new java.awt.Font("sansserif", 1, 12)); // NOI18N
+        jLabel12.setText("Potential  ROI");
+
+        totalInvestLabel.setText("0");
+
+        currentValueLabel.setText("0");
+
+        potroiLable.setText("0");
+
+        realroiLable.setText("0");
+
+        javax.swing.GroupLayout StatsPanelLayout = new javax.swing.GroupLayout(StatsPanel);
+        StatsPanel.setLayout(StatsPanelLayout);
+        StatsPanelLayout.setHorizontalGroup(
+            StatsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(StatsPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(StatsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(StatsPanelLayout.createSequentialGroup()
+                        .addComponent(title)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(StatsPanelLayout.createSequentialGroup()
+                        .addGroup(StatsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(totalInvestLabel))
+                        .addGap(56, 56, 56)
+                        .addGroup(StatsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel10)
+                            .addComponent(currentValueLabel))
+                        .addGap(50, 50, 50)
+                        .addGroup(StatsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel12)
+                            .addComponent(potroiLable))
+                        .addGap(50, 50, 50)
+                        .addGroup(StatsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(StatsPanelLayout.createSequentialGroup()
+                                .addComponent(realroiLable)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(StatsPanelLayout.createSequentialGroup()
+                                .addComponent(jLabel11)
+                                .addGap(75, 75, 75))))))
+        );
+        StatsPanelLayout.setVerticalGroup(
+            StatsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(StatsPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(title)
+                .addGap(50, 50, 50)
+                .addGroup(StatsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel10)
+                    .addComponent(jLabel11)
+                    .addComponent(jLabel12))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(StatsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(totalInvestLabel)
+                    .addComponent(currentValueLabel)
+                    .addComponent(potroiLable)
+                    .addComponent(realroiLable))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout OverviewPanelLayout = new javax.swing.GroupLayout(OverviewPanel);
@@ -150,7 +260,9 @@ public class GUIRunner extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 265, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(OverviewChartPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(OverviewPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(OverviewChartPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(StatsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(15, 15, 15))
         );
         OverviewPanelLayout.setVerticalGroup(
@@ -158,8 +270,11 @@ public class GUIRunner extends javax.swing.JFrame {
             .addGroup(OverviewPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(OverviewPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(OverviewChartPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 605, Short.MAX_VALUE))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 605, Short.MAX_VALUE)
+                    .addGroup(OverviewPanelLayout.createSequentialGroup()
+                        .addComponent(OverviewChartPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(StatsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
 
@@ -169,24 +284,16 @@ public class GUIRunner extends javax.swing.JFrame {
         StockChartPanel.setLayout(StockChartPanelLayout);
         StockChartPanelLayout.setHorizontalGroup(
             StockChartPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 852, Short.MAX_VALUE)
         );
         StockChartPanelLayout.setVerticalGroup(
             StockChartPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 343, Short.MAX_VALUE)
+            .addGap(0, 439, Short.MAX_VALUE)
         );
 
-        DescText.setEditable(false);
-        DescText.setColumns(20);
-        DescText.setLineWrap(true);
-        DescText.setRows(5);
-        DescText.setWrapStyleWord(true);
+        OvrvieText.setEditable(false);
 
-        OvervText.setEditable(false);
-        OvervText.setColumns(20);
-        OvervText.setLineWrap(true);
-        OvervText.setRows(5);
-        OvervText.setWrapStyleWord(true);
+        DescTxt.setEditable(false);
 
         javax.swing.GroupLayout StockPanelLayout = new javax.swing.GroupLayout(StockPanel);
         StockPanel.setLayout(StockPanelLayout);
@@ -194,12 +301,12 @@ public class GUIRunner extends javax.swing.JFrame {
             StockPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(StockPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(StockPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(StockPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(StockChartPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(StockPanelLayout.createSequentialGroup()
-                        .addComponent(DescText, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 246, Short.MAX_VALUE)
-                        .addComponent(OvervText, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(DescTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(OvrvieText, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         StockPanelLayout.setVerticalGroup(
@@ -207,26 +314,30 @@ public class GUIRunner extends javax.swing.JFrame {
             .addGroup(StockPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(StockChartPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(StockPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(OvervText, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)
-                    .addComponent(DescText))
+                .addGroup(StockPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(StockPanelLayout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(OvrvieText, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(StockPanelLayout.createSequentialGroup()
+                        .addGap(8, 8, 8)
+                        .addComponent(DescTxt)))
                 .addContainerGap())
         );
 
         jTabbedPane1.addTab("Stock", StockPanel);
 
-        StockTickerField.setText("example TSLA");
-
         jLabel2.setText("Stock Ticker");
 
         jLabel3.setText("Purchase Price");
 
-        PriceShareField.setText("example 50.30");
-
         jLabel4.setText("Amount of shares");
 
         BuyButton.setText("Add to Portfolio");
+        BuyButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                BuyButtonMouseClicked(evt);
+            }
+        });
 
         CurrentPriceCheckbox.setText("Use current Price");
         CurrentPriceCheckbox.addActionListener(new java.awt.event.ActionListener() {
@@ -235,17 +346,17 @@ public class GUIRunner extends javax.swing.JFrame {
             }
         });
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        remouveStockList.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                remouveStockListItemStateChanged(evt);
+            }
+        });
 
         jLabel5.setText("Select Stock");
 
         jLabel6.setText("Amount of shares");
 
-        AmountField1.setText("example 100");
-
         jLabel7.setText("Sell Price");
-
-        PriceShareField1.setText("example 50.30");
 
         CurrentPriceCheckbox1.setText("Use current Price");
         CurrentPriceCheckbox1.addActionListener(new java.awt.event.ActionListener() {
@@ -255,10 +366,15 @@ public class GUIRunner extends javax.swing.JFrame {
         });
 
         SellButton.setText("Remouve from Portfolio");
+        SellButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                SellButtonMouseClicked(evt);
+            }
+        });
 
         jScrollPane1.setViewportView(OutputTextField);
 
-        jLabel8.setText("Purchase Price");
+        jLabel8.setText("Date");
 
         TodayCheckbox_buy.setText("Today");
         TodayCheckbox_buy.addActionListener(new java.awt.event.ActionListener() {
@@ -269,14 +385,14 @@ public class GUIRunner extends javax.swing.JFrame {
 
         jLabel9.setText("Date");
 
-        PriceShareField3.setText("example 50.30");
-
         TodayCheckbox_Sell.setText("Today");
         TodayCheckbox_Sell.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 TodayCheckbox_SellActionPerformed(evt);
             }
         });
+
+        outputLable.setText(" ");
 
         javax.swing.GroupLayout TradePanelLayout = new javax.swing.GroupLayout(TradePanel);
         TradePanel.setLayout(TradePanelLayout);
@@ -290,17 +406,17 @@ public class GUIRunner extends javax.swing.JFrame {
                         .addGap(40, 40, 40)
                         .addComponent(StockTickerField, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(TradePanelLayout.createSequentialGroup()
-                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(26, 26, 26)
+                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(TradePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(PriceShareField, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(PriceShareFieldBuy, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(CurrentPriceCheckbox)))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, TradePanelLayout.createSequentialGroup()
                         .addComponent(jLabel4)
                         .addGap(18, 18, 18)
                         .addGroup(TradePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(BuyButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(AmountField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 182, Short.MAX_VALUE)))
+                            .addComponent(AmountFieldBuy, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 182, Short.MAX_VALUE)))
                     .addGroup(TradePanelLayout.createSequentialGroup()
                         .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(26, 26, 26)
@@ -327,20 +443,24 @@ public class GUIRunner extends javax.swing.JFrame {
                                     .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(18, 18, 18)
                                 .addGroup(TradePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(AmountField1, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(remouveStockList, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(AmountFieldRemouve, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(SellButton, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGroup(TradePanelLayout.createSequentialGroup()
                                 .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(26, 26, 26)
                                 .addGroup(TradePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(PriceShareField1, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(PriceShareFieldRemouve, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(CurrentPriceCheckbox1))))
                         .addContainerGap(98, Short.MAX_VALUE))))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, TradePanelLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 243, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(275, 275, 275))
+            .addGroup(TradePanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(outputLable, javax.swing.GroupLayout.PREFERRED_SIZE, 450, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         TradePanelLayout.setVerticalGroup(
             TradePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -354,18 +474,18 @@ public class GUIRunner extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(TradePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel3)
-                            .addComponent(PriceShareField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(PriceShareFieldBuy, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(CurrentPriceCheckbox))
                     .addGroup(TradePanelLayout.createSequentialGroup()
                         .addGap(41, 41, 41)
                         .addGroup(TradePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(remouveStockList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel5))
                         .addGap(18, 18, 18)
                         .addGroup(TradePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel7)
-                            .addComponent(PriceShareField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(PriceShareFieldRemouve, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(CurrentPriceCheckbox1)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -385,15 +505,17 @@ public class GUIRunner extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(TradePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(AmountField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(AmountFieldBuy, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel6)
-                    .addComponent(AmountField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(AmountFieldRemouve, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(33, 33, 33)
                 .addGroup(TradePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(BuyButton)
                     .addComponent(SellButton))
                 .addGap(50, 50, 50)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 72, Short.MAX_VALUE)
+                .addComponent(outputLable)
                 .addContainerGap())
         );
 
@@ -426,15 +548,15 @@ public class GUIRunner extends javax.swing.JFrame {
             Logger.getLogger(GUIRunner.class.getName()).log(Level.SEVERE, null, ex);
         }
         StockChartPanel.add(stkGraph.getChart(), BorderLayout.CENTER);
-        DescText.setText(obj.DTO.getStockInfo());
+        DescTxt.setText(obj.DTO.getStockInfo());
         obj.DTO.getWikiInfo();
         
-        OvervText.setText(String.format("<b>Stock: </b> %s \n", obj.symbol) +
-                String.format("<b>Current Price: </b> %f USD\n", obj.currentPrice) +
-                String.format("<b>Amount of shares: </b> %x\n\n", obj.shares) +
-                String.format("<b>Purchase value: </b> %f USD\n", obj.purchasePrice * obj.shares) +
-                String.format("<b>Current value: </b> %f USD\n",obj.currentPrice * obj.shares) +
-                String.format("<b>ROI: </b> %f USD / %f",obj.calcROI_curreny(), obj.calcROI_percent()) +
+        OvrvieText.setText(String.format("<b>Stock: </b> %s <br>", obj.symbol) +
+                String.format("<b>Current Price: </b> %.2f USD <br>", obj.currentPrice) +
+                String.format("<b>Amount of shares: </b> %d <br><br>", obj.shares) +
+                String.format("<b>Purchase value: </b> %.2f  USD <br>", obj.purchasePrice * obj.shares) +
+                String.format("<b>Current value: </b> %.2f  USD<br>",obj.currentPrice * obj.shares) +
+                String.format("<b>ROI: </b> %.2f  USD / %.2f ",obj.calcROI_curreny(), obj.calcROI_percent()) +
                 "%");
         
         jTabbedPane1.setTitleAt(1, obj.symbol);
@@ -451,12 +573,89 @@ public class GUIRunner extends javax.swing.JFrame {
     }//GEN-LAST:event_CurrentPriceCheckbox1ActionPerformed
 
     private void TodayCheckbox_buyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TodayCheckbox_buyActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_TodayCheckbox_buyActionPerformed
 
+    }//GEN-LAST:event_TodayCheckbox_buyActionPerformed
+    
     private void TodayCheckbox_SellActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TodayCheckbox_SellActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_TodayCheckbox_SellActionPerformed
+
+    private void BuyButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BuyButtonMouseClicked
+        if(StockTickerField.getText().isBlank() || AmountFieldBuy.getText().isBlank() || PriceShareFieldBuy.getText().isBlank()){
+            outputLable.setText("Missing information!");
+            return;
+        }
+        String searchStock = StockTickerField.getText();
+        searchStock = searchStock.toUpperCase();
+        int searchAmount = Integer.parseInt(AmountFieldBuy.getText());
+        float searchPrice = Float.parseFloat(PriceShareFieldBuy.getText());
+        
+        Stock newStock = null;
+        try {
+            newStock = new Stock(searchStock, searchPrice, searchAmount);
+            this.hld.add(newStock);
+            update();
+            outputLable.setText(searchStock + " added to Portfolio");
+        } catch (IOException ex) {
+            outputLable.setText(searchStock + " not Found!");
+        } catch (NullPointerException nl){
+            outputLable.setText(searchStock + " not Found!");
+        }
+    }//GEN-LAST:event_BuyButtonMouseClicked
+
+    private void jTabbedPane1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTabbedPane1StateChanged
+        if(jTabbedPane1.getSelectedIndex() == 2){
+            remouveStockList.removeAllItems();
+            SellButton.setEnabled(false);
+            for(Stock stock : this.hld.holdings){
+                remouveStockList.addItem(stock.symbol);
+            }
+        }
+        if(jTabbedPane1.getSelectedIndex() == 0){
+            try {
+                update();
+            } catch (IOException ex) {
+                Logger.getLogger(GUIRunner.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_jTabbedPane1StateChanged
+
+    private void SellButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_SellButtonMouseClicked
+        if(remouveStockList.getSelectedItem() == null || PriceShareFieldRemouve.getText().isBlank() || AmountFieldRemouve.getText().isBlank()){
+            outputLable.setText("Missing information!");
+            return;
+        }
+        float shareprice = Float.parseFloat(PriceShareFieldRemouve.getText());
+        int amountRemouve = Integer.parseInt(AmountFieldRemouve.getText());
+        
+        for(Stock stock : this.hld.holdings){
+            if(remouveStockList.getSelectedItem().toString() == stock.symbol){
+                try {
+                    if(amountRemouve >= stock.shares){
+                        this.hld.remove(stock, shareprice);
+                    } else {
+                        this.hld.adjustStock(stock, shareprice, amountRemouve);
+                    }
+                } catch (IOException ex) {
+                    Logger.getLogger(GUIRunner.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                break;
+            }
+            
+        }
+        try {
+            update();
+            outputLable.setText("Liquidation complete!");
+            SellButton.setEnabled(false);
+        } catch (IOException ex) {
+            Logger.getLogger(GUIRunner.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_SellButtonMouseClicked
+
+    private void remouveStockListItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_remouveStockListItemStateChanged
+        SellButton.setEnabled(true);
+        System.out.println(remouveStockList.getSelectedItem());
+    }//GEN-LAST:event_remouveStockListItemStateChanged
 
     /**
      * @param args the command line arguments
@@ -469,7 +668,7 @@ public class GUIRunner extends javax.swing.JFrame {
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
+                if ("FlatDarkLaf".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
@@ -499,21 +698,22 @@ public class GUIRunner extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTextField AmountField;
-    private javax.swing.JTextField AmountField1;
+    private javax.swing.JTextField AmountFieldBuy;
+    private javax.swing.JTextField AmountFieldRemouve;
     private javax.swing.JButton BuyButton;
     private javax.swing.JCheckBox CurrentPriceCheckbox;
     private javax.swing.JCheckBox CurrentPriceCheckbox1;
-    private javax.swing.JTextArea DescText;
+    private javax.swing.JEditorPane DescTxt;
     private javax.swing.JTextPane OutputTextField;
-    private javax.swing.JTextArea OvervText;
     private javax.swing.JPanel OverviewChartPanel;
     private javax.swing.JPanel OverviewPanel;
-    private javax.swing.JTextField PriceShareField;
-    private javax.swing.JTextField PriceShareField1;
+    private javax.swing.JEditorPane OvrvieText;
     private javax.swing.JTextField PriceShareField2;
     private javax.swing.JTextField PriceShareField3;
+    private javax.swing.JTextField PriceShareFieldBuy;
+    private javax.swing.JTextField PriceShareFieldRemouve;
     private javax.swing.JButton SellButton;
+    private javax.swing.JPanel StatsPanel;
     private javax.swing.JPanel StockChartPanel;
     private javax.swing.JPanel StockPanel;
     private javax.swing.JTable StockTable;
@@ -521,7 +721,11 @@ public class GUIRunner extends javax.swing.JFrame {
     private javax.swing.JCheckBox TodayCheckbox_Sell;
     private javax.swing.JCheckBox TodayCheckbox_buy;
     private javax.swing.JPanel TradePanel;
-    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JLabel currentValueLabel;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -533,5 +737,11 @@ public class GUIRunner extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JLabel outputLable;
+    private javax.swing.JLabel potroiLable;
+    private javax.swing.JLabel realroiLable;
+    private javax.swing.JComboBox<String> remouveStockList;
+    private javax.swing.JLabel title;
+    private javax.swing.JLabel totalInvestLabel;
     // End of variables declaration//GEN-END:variables
 }
